@@ -21,12 +21,6 @@ class Workers(QObject):
         # self.finishSignal.emit()
 
 
-
-
-
-
-
-
 class GraficUI(QWidget):
     count = 0
     def __init__(self):
