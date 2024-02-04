@@ -3,6 +3,9 @@ from PyQt5 import uic
 from PyQt5.QtCore import QThread, QObject, pyqtSignal
 import sys
 import time
+from pyModbusTCP.client import ModbusClient
+import random
+import re
 
 
 
@@ -12,17 +15,28 @@ class GraficUI(QWidget):
     count = 0
     threads =[]
     workers =[]
+
     def __init__(self):
         QWidget.__init__(self)
         self.setUI()
+        self.data = []
 
     def setUI(self):
         self.UI = uic.loadUi("UITest.ui")
         self.UI.pushButton.clicked.connect(self.click_btn)
-        self.UI.pushButton_2.clicked.connect(self.click_btn1)
-        self.UI.pushButton_3.clicked.connect(self.click_btn1)
+        self.UI.pushButton_2.clicked.connect(self.btn1)
+        self.UI.pushButton_3.clicked.connect(self.btn2)
         self.UI.show()
 
+
+
+    def btn1(self):
+        self.UI.pushButton_2.setEnabled(False)
+        self.click_btn1("btn1")
+
+    def btn2(self):
+        self.take_data()
+        self.click_btn1("btn2")
 
 
     def click_btn(self):
@@ -31,21 +45,28 @@ class GraficUI(QWidget):
         self.UI.lcdNumber.display(self.count)
 
 
-    def click_btn1(self):
+    def click_btn1(self, btn):
         self.workers.append(Workers())
         self.threads.append(QThread())
-        index_thread = len(self.threads)-1
         print(self.workers)
         obj = self.workers[-1]
 
         t = self.threads[-1]
+
         obj.work = obj
         obj.thread = t
+        obj.btn = btn
+        obj.random_data = True if self.UI.checkBox_2.checkState() == 2 else False
+        obj.repeat = True if self.UI.checkBox.checkState() == 2 else False
+
+        obj.data = self.data
+        print("o")
         obj.moveToThread(t)
         t.started.connect(obj.start)
         print("----")
         obj.finishSignal.connect(t.quit)
-        obj.timer.connect(self.outSignal)
+        obj.read.connect(self.outSignal)
+        #obj.write.connect(self.outSignal)
         t.start()
         print("====")
 
@@ -54,28 +75,47 @@ class GraficUI(QWidget):
         self.UI.lineEdit.setText(str(res))
 
 
-
-    def click_btn2(self):
-        self.UI.lineEdit_2.setText("Работаю")
-        time.sleep(5)
-        self.UI.lineEdit_2.setText("Ok")
+    def take_data(self):
+        text_data = self.UI.lineEdit_2.text()
+        data = re.findall('\d+', text_data)
+        self.data = list(map(lambda x: int(x), data))
 
 class Workers(QObject):
     finishSignal = pyqtSignal()
     timer = pyqtSignal(int)
-    status = pyqtSignal(bool)
+    read = pyqtSignal(list)
+    write = pyqtSignal(list)
+
     def __init__(self):
         super(Workers, self).__init__()
         self.work = 0
         self.thread = 0
+        self.btn = 0
+        self.client = ModbusClient(debug=False, auto_open=True)
+        self.data = []
+        self.repeat = False
+        self.random_data = False
+        self.status = True
+
     def start(self):
-        self.status.emit(True)
         print("старт")
-        for i in range(10):
-            self.timer.emit(i)
+        print(self.repeat)
+        while self.status:
+
+            if self.btn == "btn1":
+                read = self.client.read_holding_registers(1, 10)
+                self.read.emit(read)
+            else:
+                if self.random_data:
+                    self.data = [random.randint(0, 100) for i in range(10)]
+                else:
+                    pass
+                self.client.write_multiple_registers(1, self.data)
+                self.status = self.repeat
+                #self.write.emit(write)
             time.sleep(1)
-        self.status.emit(False)
         self.finishSignal.emit()
+
         GraficUI.threads.pop(GraficUI.threads.index(self.thread))
         GraficUI.workers.pop(GraficUI.workers.index(self.work))
 

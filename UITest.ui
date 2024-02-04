@@ -41,6 +41,12 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="mode">
+     <enum>QLCDNumber::Dec</enum>
+    </property>
+    <property name="value" stdset="0">
+     <double>0.000000000000000</double>
+    </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -118,13 +124,26 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>370</y>
+      <y>380</y>
       <width>131</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Отсылать постоянно</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>380</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Включить рандом</string>
     </property>
    </widget>
   </widget>
