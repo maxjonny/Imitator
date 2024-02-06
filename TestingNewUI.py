@@ -27,6 +27,8 @@ class GraficUI(QWidget):
         self.UI.pushButton_2.clicked.connect(self.btn1)
         self.UI.pushButton_3.clicked.connect(self.btn2)
         self.UI.pushButton_4.clicked.connect(self.take_data)
+        self.UI.pushButton_5.clicked.connect(self.deactivate)
+        self.UI.pushButton_6.clicked.connect(self.activate)
         self.UI.show()
         self.UI.pushButton_4.setEnabled(False)
 
@@ -46,8 +48,15 @@ class GraficUI(QWidget):
         self.count += 1
         print(Workers.data)
         print(self.threads)
+        print(Workers.status)
         self.UI.lcdNumber.display(self.count)
 
+    def deactivate(self):
+        Workers.status = False
+        self.UI.pushButton_2.setEnabled(True)
+
+    def activate(self):
+        Workers.status = True
 
 
     def click_btn1(self, btn):
@@ -91,6 +100,7 @@ class Workers(QObject):
     read = pyqtSignal(list)
     write = pyqtSignal(list)
     data = []
+    status = True
     def __init__(self):
         super(Workers, self).__init__()
         self.work = 0
@@ -99,7 +109,6 @@ class Workers(QObject):
         self.client = ModbusClient(debug=False, auto_open=True)
         self.repeat = False
         self.random_data = False
-        self.status = True
 
     def start(self):
         while self.status:
@@ -110,9 +119,11 @@ class Workers(QObject):
                 if self.random_data:
                     self.data = [random.randint(0, 100) for i in range(10)]
                 self.client.write_multiple_registers(1, self.data)
-                self.status = self.repeat
+                print(f"status {self.status} repeat {self.repeat} itog {self.repeat and self.status}")
+                self.status = self.repeat and Workers.status
+
                 #self.write.emit(write)
-            time.sleep(0.1)
+            time.sleep(1)
         self.finishSignal.emit()
 
         GraficUI.threads.pop(GraficUI.threads.index(self.thread))
