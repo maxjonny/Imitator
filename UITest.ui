@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1126</width>
-    <height>851</height>
+    <height>903</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -191,7 +191,7 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>121</x>
       <y>464</y>
       <width>981</width>
       <height>381</height>
@@ -237,20 +237,10 @@
      <string>Подключить усо3.1</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>820</x>
-      <y>90</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>140</x>
       <y>410</y>
       <width>320</width>
       <height>31</height>
@@ -290,7 +280,7 @@
    <widget class="QLineEdit" name="lineEdit_15">
     <property name="geometry">
      <rect>
-      <x>163</x>
+      <x>194</x>
       <y>442</y>
       <width>50</width>
       <height>20</height>
@@ -318,7 +308,7 @@
    <widget class="QLineEdit" name="lineEdit_16">
     <property name="geometry">
      <rect>
-      <x>219</x>
+      <x>250</x>
       <y>442</y>
       <width>741</width>
       <height>20</height>
@@ -337,7 +327,7 @@
    <widget class="QLineEdit" name="lineEdit_17">
     <property name="geometry">
      <rect>
-      <x>970</x>
+      <x>1001</x>
       <y>442</y>
       <width>75</width>
       <height>20</height>
@@ -356,7 +346,7 @@
    <widget class="QLineEdit" name="lineEdit_18">
     <property name="geometry">
      <rect>
-      <x>107</x>
+      <x>138</x>
       <y>442</y>
       <width>50</width>
       <height>20</height>
@@ -383,6 +373,30 @@
     <property name="readOnly">
      <bool>true</bool>
     </property>
+   </widget>
+   <widget class="QScrollArea" name="scrollArea_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>464</y>
+      <width>91</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>89</width>
+       <height>379</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2"/>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
